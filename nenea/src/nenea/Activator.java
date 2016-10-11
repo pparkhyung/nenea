@@ -3,6 +3,8 @@ package nenea;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 
+import nenea.info.CpuInfo;
+
 public class Activator implements BundleActivator {
 
 	/*
@@ -15,6 +17,10 @@ public class Activator implements BundleActivator {
 
 		System.out.println("Client 시작");
 		new Client().start();
+		
+		System.loadLibrary("sigar-amd64-winnt"); //.dll을 뺴고 쓴다
+		
+		new CpuInfo().monitor();
 	}
 
 	/*

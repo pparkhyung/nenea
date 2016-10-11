@@ -53,12 +53,14 @@ public class OperationClientHandler extends SimpleChannelInboundHandler<Object> 
 	final static String OP_CODE_REQUEST = "OP_REQUEST"; // agent에게 정보를 요청
 	final static String OP_CODE_SHELL = "OP_SHELL"; // agent에게 shell 실행을 명령
 	final static String OP_CODE_JOIN = "OP_JOIN"; // server와 연결 생성 후 가입메시지를 보냄
+	
+	static final String nenesName = System.getProperty("neneaName", "agent");
 
 	@Override
 	public void channelActive(ChannelHandlerContext ctx) throws Exception {
 		System.out.println("Client " + ctx.channel().remoteAddress() + " channelActive!");
-		String msg = "Agent";
-		ctx.writeAndFlush(this.initializeProtocol(msg, ctx.channel()));
+
+		ctx.writeAndFlush(this.initializeProtocol(nenesName, ctx.channel()));
 	}
 
 	// Operation Header 생성
@@ -113,9 +115,10 @@ public class OperationClientHandler extends SimpleChannelInboundHandler<Object> 
 
 			if (headerBody.startsWith("OP")) {
 				operationCode = headerBody;
-			} else if (headerBody.endsWith(".zip") || headerBody.endsWith(".txt") || headerBody.endsWith(".tar")) {
+			//} else if (headerBody.endsWith(".zip") || headerBody.endsWith(".txt") || headerBody.endsWith(".tar")) {
+			} else if (true) { //확장자 검증 없음요
 				fileName = headerBody;
-				localFileName = "D:\\nene_data\\" + System.currentTimeMillis() + fileName;
+				localFileName = "D:\\nene_data\\" + ctx.channel().id() + System.currentTimeMillis() + fileName;
 				recFile = new File(localFileName);
 				fileOutputStream = new FileOutputStream(recFile);
 			} else {
